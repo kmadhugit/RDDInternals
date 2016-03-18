@@ -8,7 +8,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark._
 
 
-class myPartition1(val index: Int, val parent : Partition) extends Partition with Serializable {
+class myPartition(val index: Int, val parent : Partition) extends Partition with Serializable {
   // Put all the additional data/methods you need to pass to compute function, to compute the given partition. Also store
   // parent partition data, because you need to get parent's partition data to manipulate.
   def extraData() = {
@@ -21,7 +21,7 @@ class myPartition1(val index: Int, val parent : Partition) extends Partition wit
   }
 }
 
-class DecorateRDD(parentRDD:RDD[String], a:String, b:String) extends RDD[String](parentRDD){
+class GPURDD(parentRDD:RDD[String], a:String, b:String) extends RDD[String](parentRDD){
 
   /*
     This would be called during runtask. This is the actual function, it should return the data for the
@@ -44,13 +44,13 @@ class DecorateRDD(parentRDD:RDD[String], a:String, b:String) extends RDD[String]
    argument to compute function.
   */
   override protected def getPartitions: Array[Partition] = {
-    val mypartitions = for(x <- firstParent[String].partitions) yield new myPartition1(x.index,x)
+    val mypartitions = for(x <- firstParent[String].partitions) yield new myPartition(x.index,x)
     mypartitions.map(_.asInstanceOf[Partition])
   }
 
   // This would be called by Task Scheduler.
   override protected def getPreferredLocations(split: Partition): Seq[String] = {
-    split.asInstanceOf[myPartition1].preferredLocations
+    split.asInstanceOf[myPartition].preferredLocations
   }
 
   override def getDependencies: Seq[Dependency[_]] = {
@@ -59,16 +59,26 @@ class DecorateRDD(parentRDD:RDD[String], a:String, b:String) extends RDD[String]
     List(new OneToOneDependency(parentRDD))
   }
 
+  def hello(): Unit = {
+    println("Hello...")
+  }
+
 }
 
-class RDDConverterClass1(rdd:RDD[String]) {
+class RDDConverterClass(rdd:RDD[String]) {
   def decorate(a:String, b:String) = new DecorateRDD(rdd,a,b)
 }
 
-object UserDefinedRDD {
+class ABC[T](rdd : RDD[T]){
+ def mapGPU() : Unit = {
+   println("hello")
+ }
+}
+
+object CustomRDD {
 
 
-  implicit def RDDConverFunc(rdd: RDD[String]) = new RDDConverterClass(rdd)
+  implicit def RDDConverFunc[T](rdd: RDD[T]) = new ABC(rdd)
 
   def main(args : Array[String]) =
   {
@@ -76,11 +86,12 @@ object UserDefinedRDD {
     val sc = new SparkContext(conf)
 
     val baseRDD = sc.parallelize(1 to 10, 4).map(_.toString)
+
     println(baseRDD.collect().toList)
 
 
-    val y = baseRDD.decorate("< "," >")
-    println(y.collect().toList)
+    val y = baseRDD.mapGPU()
+
 
   }
 }
