@@ -6,6 +6,8 @@ import org.apache.spark.{SparkContext, SparkConf}
 /**
  * Created by kmadhu on 15/3/16.
  */
+
+
 object DFSimple {
 
   case class data(i : Int, j: Int, k: Int)
@@ -19,7 +21,17 @@ object DFSimple {
 
     val df = sc.parallelize(1 to 10, 4).map(i => data(i,i*10,i*100)).toDF
 
-    df.select(df("i")+1).explain()
+    import org.apache.spark.sql.functions.udf
+
+    val col = df("i")
+
+    val rdd = df.toJavaRDD
+
+    println(rdd.collect());
+
+
+
+
 
 
   }

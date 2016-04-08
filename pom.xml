@@ -71,14 +71,6 @@
           <artifactId>spark-sql_2.10</artifactId>
           <version>1.6.1</version>
       </dependency>
-
-
-
-      <dependency>
-      <groupId>org.mystic</groupId>
-      <artifactId>mavenized-jcuda</artifactId>
-      <version>0.1.2</version>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
