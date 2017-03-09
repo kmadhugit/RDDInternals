@@ -23,16 +23,20 @@ object DFSimple {
 
     import org.apache.spark.sql.functions.udf
 
-    val col = df("i")
+
+    val coli = df("i")
+    val colj = df("j")
+    val colk = df("k")
+
+
+
+    df.select(coli,colj).show();
+
+
 
     val rdd = df.toJavaRDD
 
     println(rdd.collect());
-
-
-
-
-
 
   }
 
