@@ -33,10 +33,10 @@ object HelloTwitter {
   def main(args: Array[String]): Unit = {
     // Add your own Twitter API configuration stuff
     //////////////// TWITTER API CONF PART START ////////////////
-    val consumerKey = "9QR5oQZYJyO2I8vCXlAwZHhtT"
-    val consumerSecret = "wfj2TcfQpHioAiNPioYXCxbIk0cs7tX9IDl1EydCsuuT3MF3tz"
-    val accessToken = "3124911061-OsRjd7sdQYRXQ2IxkTzjb9X5QIwd7dWLBJC56BZ"
-    val accessTokenSecret = "5cGf655wG2Fr6UP96BWdwNgx7PF8hYXb8kkk6ETfSWSHb"
+    val consumerKey = ""
+    val consumerSecret = ""
+    val accessToken = ""
+    val accessTokenSecret = ""
     //////////////// TWITTER API CONF PART END  ////////////////
 
     // Disable tons of logging
